@@ -44,7 +44,6 @@
       <label class="form-label" for="priorityFilterSelect">Prioritas</label>
       <select id="priorityFilterSelect" name="priority" class="form-control">
         <option value="All" {% if priority_filter == 'All' %}selected{% endif %}>Semua Prioritas</option>
-        <option value="High Priority" {% if priority_filter == 'High Priority' %}selected{% endif %}>Prioritas Tinggi (High)</option>
         <option value="Low" {% if priority_filter == 'Low' %}selected{% endif %}>Rendah (Low)</option>
         <option value="Medium" {% if priority_filter == 'Medium' %}selected{% endif %}>Sedang (Medium)</option>
         <option value="High" {% if priority_filter == 'High' %}selected{% endif %}>Tinggi (High)</option>
