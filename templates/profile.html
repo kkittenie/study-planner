@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Profil Pengguna | Study Planner{% endblock %}
+
+{% block content %}
+<div class="card-editorial cream-bg" style="max-width: 640px; margin: 0 auto;">
+  <div class="card-title-editorial">
+    <span>Profil Pengguna & Akun</span>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 1.5rem; padding-bottom: 1.75rem; border-bottom: 1px solid var(--border-editorial); margin-bottom: 1.75rem; flex-wrap: wrap;">
+    <div style="width: 72px; height: 72px; background-color: var(--teal-dark); border-radius: var(--radius-sm); border: 2px solid var(--cream); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow); box-shadow: var(--shadow-editorial); flex-shrink: 0;">
+      {{ user.username[0] | upper }}
+    </div>
+    <div>
+      <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; color: var(--teal-dark); letter-spacing: -0.02em;">{{ user.username }}</h2>
+      <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600; margin-top: 0.2rem;">
+        📧 {{ user.email }}
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 0.78125rem; color: var(--text-muted); margin-top: 0.25rem;">
+        Terdaftar sejak: {{ user.created_at }}
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 1.25rem;">
+    Ringkasan Workspace Belajar
+  </h3>
+
+  <div class="metrics-varied-grid" style="margin-bottom: 1.75rem;">
+    <div class="metric-card-editorial cream-theme" style="min-height: 120px; padding: 1.25rem;">
+      <div class="metric-card-label" style="color: var(--teal-dark);">Mata Pelajaran</div>
+      <div class="metric-card-num" style="color: var(--teal-dark); font-size: 2.4rem;">{{ total_subjects }}</div>
+    </div>
+    <div class="metric-card-editorial teal-theme" style="min-height: 120px; padding: 1.25rem;">
+      <div class="metric-card-label" style="color: var(--yellow);">Total Tugas</div>
+      <div class="metric-card-num" style="color: var(--cream); font-size: 2.4rem;">{{ total_tasks }}</div>
+    </div>
+    <div class="metric-card-editorial coral-theme" style="min-height: 120px; padding: 1.25rem;">
+      <div class="metric-card-label">Blok Jadwal</div>
+      <div class="metric-card-num" style="font-size: 2.4rem;">{{ total_schedules }}</div>
+    </div>
+  </div>
+
+  <div style="border-top: 1px solid var(--border-editorial); padding-top: 1.35rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <span style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600;">Status Sesi: <strong style="color: var(--green-status);">Aktif 🟢</strong></span>
+    <a href="{{ url_for('logout') }}" class="btn-editorial btn-editorial-coral">Keluar dari Akun</a>
+  </div>
+</div>
+{% endblock %}

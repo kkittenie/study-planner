@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Beranda | Study Planner{% endblock %}
+
+{% block content %}
+<!-- Hero Section Editorial -->
+<div class="hero-editorial">
+  <div class="hero-circle-accent"></div>
+  <div class="hero-circle-accent-2"></div>
+  
+  <span class="hero-tag">JADWAL MINGGU INI</span>
+  <h1 class="heading-display">Rencanakan<br>studimu.<br>Kuasai<br>progresmu.</h1>
+  <p class="heading-sub">
+    Selamat datang kembali, <strong>{{ current_user.username }}</strong>. Berikut ringkasan kegiatan belajar kamu hari ini ({{ today_name }}).
+  </p>
+</div>
+
+<!-- Varied Statistics Cards -->
+<div class="metrics-varied-grid">
+  <!-- Card 1: Cream Theme - Total Tasks -->
+  <div class="metric-card-editorial cream-theme">
+    <div class="metric-card-label" style="color: var(--teal-dark);">Total Tugas</div>
+    <div>
+      <div class="metric-card-num" style="color: var(--teal-dark);">{{ total_tasks }}</div>
+      <div style="font-size: 0.8125rem; color: var(--text-muted); font-weight: 600; margin-top: 0.25rem;">Tugas Terdaftar</div>
+    </div>
+  </div>
+
+  <!-- Card 2: Teal Dark Theme - Selesai -->
+  <div class="metric-card-editorial teal-theme">
+    <div class="metric-card-label" style="color: var(--yellow);">Progres Selesai</div>
+    <div>
+      <div class="metric-card-num" style="color: var(--cream);">{{ overall_progress }}%</div>
+      <div style="font-size: 0.8125rem; color: rgba(245, 241, 232, 0.7); font-weight: 600; margin-top: 0.25rem;">{{ completed_tasks }} dari {{ total_tasks }} Selesai</div>
+    </div>
+  </div>
+
+  <!-- Card 3: Coral Theme - Mendesak -->
+  <div class="metric-card-editorial coral-theme">
+    <div class="metric-card-label">Segera Hadir</div>
+    <div>
+      <div class="metric-card-num">{{ due_soon_tasks }}</div>
+      <div style="font-size: 0.8125rem; color: rgba(255, 255, 255, 0.85); font-weight: 600; margin-top: 0.25rem;">Tenggat 24-48 Jam</div>
+    </div>
+  </div>
+
+  <!-- Card 4: Yellow Theme - Belum Selesai -->
+  <div class="metric-card-editorial yellow-theme">
+    <div class="metric-card-label">Tugas Tertunda</div>
+    <div>
+      <div class="metric-card-num">{{ pending_tasks }}</div>
+      <div style="font-size: 0.8125rem; color: rgba(25, 73, 75, 0.8); font-weight: 600; margin-top: 0.25rem;">Perlu Perhatian</div>
+    </div>
+  </div>
+</div>
+
+<!-- Large Dark Teal Progress Section -->
+<div class="card-editorial dark-bg">
+  <div class="card-title-editorial">
+    <span>PROGRES KAMU</span>
+    <span style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; color: var(--yellow);">{{ overall_progress }}%</span>
+  </div>
+  
+  <p style="font-size: 1.05rem; color: rgba(245, 241, 232, 0.85); font-weight: 600; margin-bottom: 1.25rem;">
+    {% if overall_progress >= 80 %}
+      Luar biasa! Kamu membuat kemajuan yang sangat solid minggu ini.
+    {% elif overall_progress >= 50 %}
+      Perkembangan bagus! Tetap jaga ritme belajarmu.
+    {% else %}
+      Yuk mulai selesaikan tugas-tugas terdaftarmu satu per satu!
+    {% endif %}
+  </p>
+
+  <div class="progress-bar-container" style="height: 20px;">
+    <div class="progress-bar-fill" style="width: {{ overall_progress }}%;"></div>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; font-size: 0.85rem; color: rgba(245, 241, 232, 0.7); font-family: var(--font-mono);">
+    <span>{{ completed_tasks }} Selesai</span>
+    <span>{{ pending_tasks }} Tersisa</span>
+  </div>
+</div>
+
+<!-- Grid: Schedule Today & Due Today -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem; margin-bottom: 2rem;">
+  
+  <!-- Today's Schedule -->
+  <div class="card-editorial cream-bg">
+    <div class="card-title-editorial">
+      <span>Jadwal Hari Ini ({{ today_name }})</span>
+      <a href="{{ url_for('schedule') }}" class="btn-editorial btn-editorial-teal btn-editorial-sm">+ Tambah</a>
+    </div>
+
+    {% if todays_schedule %}
+      <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+        {% for item in todays_schedule %}
+        <div style="border: 1px solid var(--border-editorial); border-radius: var(--radius-sm); padding: 1rem; background: var(--cream-card); border-left: 6px solid {{ item.subject_color }};">
+          <div style="font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--teal-dark);">{{ item.subject_name }}</div>
+          <div style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.25rem; font-weight: 600;">
+            🕒 {{ item.start_time }} - {{ item.end_time }}
+          </div>
+          {% if item.notes %}
+          <div style="font-size: 0.85rem; color: var(--text-dark); margin-top: 0.35rem;">
+            📌 {{ item.notes }}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-text">Belum ada jadwal hari ini</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Tambahkan blok waktu belajar kamu.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Due Today Tasks -->
+  <div class="card-editorial cream-bg">
+    <div class="card-title-editorial">
+      <span>Tenggat Hari Ini</span>
+      <a href="{{ url_for('task_create') }}" class="btn-editorial btn-editorial-coral btn-editorial-sm">+ Tugas</a>
+    </div>
+
+    {% if due_today %}
+      <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+        {% for task in due_today %}
+        <div style="border: 1px solid var(--border-editorial); border-radius: var(--radius-sm); padding: 1rem; background: var(--cream-card); display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;">
+          <div>
+            <div style="font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--teal-dark);">{{ task.title }}</div>
+            <div style="margin-top: 0.35rem; display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+              {% if task.subject_name %}
+                <span class="badge-editorial" style="background-color: {{ task.subject_color }}; color: #ffffff;">{{ task.subject_name }}</span>
+              {% endif %}
+              <span class="badge-editorial badge-{{ task.priority | lower }}">{{ task.priority }}</span>
+            </div>
+          </div>
+          <form method="POST" action="{{ url_for('task_complete', id=task.id) }}">
+            <button type="submit" class="btn-editorial btn-editorial-teal btn-editorial-sm">Selesai</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-text">Semua tugas hari ini beres</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Tidak ada tugas yang jatuh tempo hari ini.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Upcoming Tasks ("TUGAS MENDATANG") -->
+<div class="card-editorial cream-bg">
+  <div class="card-title-editorial">
+    <span>TUGAS MENDATANG</span>
+    <a href="{{ url_for('tasks') }}" class="btn-editorial btn-editorial-yellow btn-editorial-sm">Lihat Semua</a>
+  </div>
+
+  {% if upcoming_tasks %}
+    <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+      {% for task in upcoming_tasks %}
+      <div style="border: 1px solid var(--border-editorial); border-radius: var(--radius-sm); padding: 1rem; background: var(--cream-card); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <div style="font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--teal-dark);">{{ task.title }}</div>
+          <div style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.2rem;">
+            Tenggat: {{ task.deadline }}
+          </div>
+        </div>
+        <div>
+          {% if task.subject_name %}
+            <span class="badge-editorial" style="background-color: {{ task.subject_color }}; color: #ffffff;">{{ task.subject_name }}</span>
+          {% endif %}
+          <span class="badge-editorial badge-{{ task.priority | lower }}">{{ task.priority }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state" style="padding: 2rem;">
+      <div class="empty-text">Belum ada tugas mendatang</div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

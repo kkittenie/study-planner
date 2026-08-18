@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}Daftar Tugas | Study Planner{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="hero-editorial" style="padding: 2.25rem 2rem; margin-bottom: 1.5rem;">
+  <span class="hero-tag coral">MANAJEMEN TUGAS</span>
+  <h1 class="heading-display" style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 0.5rem;">Tugas kamu.</h1>
+  <p class="heading-sub">Semua yang perlu kamu selesaikan untuk mencapai target studimu.</p>
+</div>
+
+<div class="card-editorial cream-bg">
+  <div class="card-title-editorial">
+    <span>Daftar Tugas</span>
+    <button type="button" class="btn-editorial btn-editorial-coral" data-open-modal="#add-task-modal">+ Tambah Tugas</button>
+  </div>
+
+  <!-- Filters & Search Form -->
+  <form method="GET" action="{{ url_for('tasks') }}" class="tasks-filter-form">
+    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(25, 73, 75, 0.12); margin-bottom: 0.25rem;">
+      <span style="font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; color: var(--teal-dark);">Filter & Pencarian</span>
+      {% if status_filter != 'All' or priority_filter != 'All' or search_query %}
+        <a href="{{ url_for('tasks') }}" style="font-size: 0.78125rem; font-weight: 700; color: var(--coral); text-decoration: none; background: var(--coral-soft); padding: 0.25rem 0.65rem; border-radius: var(--radius-pill);" title="Reset semua filter">Reset Filter ↻</a>
+      {% endif %}
+    </div>
+
+    <div class="filter-field">
+      <label class="form-label" for="q">Cari Tugas / Mapel</label>
+      <input type="text" id="q" name="q" class="form-control" placeholder="Ketik kata kunci..." value="{{ search_query }}">
+    </div>
+
+    <div class="filter-field">
+      <label class="form-label" for="statusFilterSelect">Status</label>
+      <select id="statusFilterSelect" name="status" class="form-control">
+        <option value="All" {% if status_filter == 'All' %}selected{% endif %}>Semua Status</option>
+        <option value="To Do" {% if status_filter == 'To Do' %}selected{% endif %}>Belum Dimulai (To Do)</option>
+        <option value="In Progress" {% if status_filter == 'In Progress' %}selected{% endif %}>Sedang Dikerjakan</option>
+        <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Selesai (Completed)</option>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label class="form-label" for="priorityFilterSelect">Prioritas</label>
+      <select id="priorityFilterSelect" name="priority" class="form-control">
+        <option value="All" {% if priority_filter == 'All' %}selected{% endif %}>Semua Prioritas</option>
+        <option value="High Priority" {% if priority_filter == 'High Priority' %}selected{% endif %}>Prioritas Tinggi (High)</option>
+        <option value="Low" {% if priority_filter == 'Low' %}selected{% endif %}>Rendah (Low)</option>
+        <option value="Medium" {% if priority_filter == 'Medium' %}selected{% endif %}>Sedang (Medium)</option>
+        <option value="High" {% if priority_filter == 'High' %}selected{% endif %}>Tinggi (High)</option>
+      </select>
+    </div>
+  </form>
+
+  {% if tasks %}
+    <!-- Desktop Table View (Hidden on mobile) -->
+    <div class="tasks-table-view">
+      <table class="brutal-table">
+        <thead>
+          <tr>
+            <th style="width: 140px;">Status</th>
+            <th>Judul Tugas</th>
+            <th>Mata Pelajaran</th>
+            <th>Tenggat</th>
+            <th>Prioritas</th>
+            <th style="text-align: right;">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+          <tr>
+            <td>
+              <form method="POST" action="{{ url_for('task_complete', id=task.id) }}">
+                <button type="submit" class="btn-editorial btn-editorial-sm {% if task.status == 'Completed' %}btn-editorial-teal{% else %}btn-editorial-yellow{% endif %}">
+                  {% if task.status == 'Completed' %}✓ Selesai{% else %}Tandai Selesai{% endif %}
+                </button>
+              </form>
+            </td>
+            <td>
+              <div style="font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--teal-dark); {% if task.status == 'Completed' %}text-decoration: line-through; opacity: 0.5;{% endif %}">
+                {{ task.title }}
+              </div>
+              {% if task.description %}
+                <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.2rem;">
+                  {{ task.description }}
+                </div>
+              {% endif %}
+            </td>
+            <td>
+              {% if task.subject_name %}
+                <span class="badge-editorial" style="background-color: {{ task.subject_color }}; color: #ffffff;">{{ task.subject_name }}</span>
+              {% else %}
+                <span style="font-size: 0.8125rem; color: var(--text-muted);">-</span>
+              {% endif %}
+            </td>
+            <td style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--teal-dark); font-weight: 600;">
+              {{ task.deadline }}
+            </td>
+            <td>
+              <span class="badge-editorial badge-{{ task.priority | lower }}">{{ task.priority }}</span>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: inline-flex; gap: 0.4rem;">
+                <a href="{{ url_for('task_edit', id=task.id) }}" class="btn-editorial btn-editorial-sm btn-editorial-teal">Edit</a>
+                <form method="POST" action="{{ url_for('task_delete', id=task.id) }}" onsubmit="return confirm('Hapus tugas ini?');">
+                  <button type="submit" class="btn-editorial btn-editorial-sm btn-editorial-coral">Hapus</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Task Cards View (Shown only on mobile screens <= 768px) -->
+    <div class="tasks-cards-view">
+      {% for task in tasks %}
+      <div class="mobile-task-card {% if task.status == 'Completed' %}task-card-completed{% endif %}">
+        <div class="mobile-task-header">
+          <div class="mobile-task-badges">
+            {% if task.subject_name %}
+              <span class="badge-editorial" style="background-color: {{ task.subject_color }}; color: #ffffff;">{{ task.subject_name }}</span>
+            {% endif %}
+            <span class="badge-editorial badge-{{ task.priority | lower }}">{{ task.priority }}</span>
+          </div>
+          <form method="POST" action="{{ url_for('task_complete', id=task.id) }}">
+            <button type="submit" class="btn-editorial btn-editorial-sm {% if task.status == 'Completed' %}btn-editorial-teal{% else %}btn-editorial-yellow{% endif %}">
+              {% if task.status == 'Completed' %}✓ Selesai{% else %}Tandai Selesai{% endif %}
+            </button>
+          </form>
+        </div>
+
+        <div class="mobile-task-body">
+          <div class="mobile-task-title {% if task.status == 'Completed' %}completed-title{% endif %}">
+            {{ task.title }}
+          </div>
+          {% if task.description %}
+            <div class="mobile-task-desc">{{ task.description }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mobile-task-footer">
+          <div class="mobile-task-deadline">
+            <span>📅 Tenggat:</span> <strong>{{ task.deadline }}</strong>
+          </div>
+          <div class="mobile-task-actions">
+            <a href="{{ url_for('task_edit', id=task.id) }}" class="btn-editorial btn-editorial-sm btn-editorial-teal">Edit</a>
+            <form method="POST" action="{{ url_for('task_delete', id=task.id) }}" onsubmit="return confirm('Hapus tugas ini?');" style="display: inline;">
+              <button type="submit" class="btn-editorial btn-editorial-sm btn-editorial-coral">Hapus</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-text">Belum ada tugas</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+        Klik "+ Tambah Tugas" di atas untuk mencatat tugas baru.
+      </p>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Add Task POP-UP MODAL -->
+<div class="modal-form-backdrop" id="add-task-modal">
+  <div class="modal-form-card">
+    <div class="modal-form-header">
+      <h3 class="modal-form-title">Tambah Tugas Baru</h3>
+      <button type="button" class="modal-form-close" data-close-modal>&times;</button>
+    </div>
+
+    <form method="POST" action="{{ url_for('task_create') }}">
+      <div class="form-group">
+        <label class="form-label" for="task_modal_title">Judul Tugas *</label>
+        <input type="text" id="task_modal_title" name="title" class="form-control" required placeholder="contoh: Soal Latihan Kalkulus Bab 4">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="task_modal_subject">Mata Pelajaran</label>
+        <select id="task_modal_subject" name="subject_id" class="form-control">
+          <option value="">Pilih Mata Pelajaran</option>
+          {% for sub in subjects %}
+            <option value="{{ sub.id }}">{{ sub.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="task_modal_deadline">Tanggal Tenggat *</label>
+        <input type="date" id="task_modal_deadline" name="deadline" class="form-control" required value="{{ default_date or '' }}">
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="task_modal_priority">Prioritas</label>
+          <select id="task_modal_priority" name="priority" class="form-control">
+            <option value="Low">Rendah (Low)</option>
+            <option value="Medium" selected>Sedang (Medium)</option>
+            <option value="High">Tinggi (High)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="task_modal_status">Status</label>
+          <select id="task_modal_status" name="status" class="form-control">
+            <option value="To Do" selected>Belum Dimulai (To Do)</option>
+            <option value="In Progress">Sedang Dikerjakan</option>
+            <option value="Completed">Selesai (Completed)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="task_modal_desc">Deskripsi / Catatan</label>
+        <textarea id="task_modal_desc" name="description" class="form-control" rows="3" placeholder="Tambahkan instruksi tugas..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn-editorial btn-editorial-coral" style="flex: 1; padding: 0.85rem;">+ Simpan Tugas</button>
+        <button type="button" class="btn-editorial btn-editorial-teal" data-close-modal style="padding: 0.85rem;">Batal</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

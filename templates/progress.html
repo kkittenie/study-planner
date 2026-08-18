@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Progres Belajar | Study Planner{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="hero-editorial" style="padding: 2.25rem 2rem; margin-bottom: 2rem;">
+  <span class="hero-tag coral">ANALISIS PROGRES</span>
+  <h1 class="heading-display" style="font-size: clamp(2rem, 4vw, 3rem);">Teruskan progresmu.</h1>
+  <p class="heading-sub">Pantau tingkat penyelesaian tugas dan konsistensi belajar kamu per mata pelajaran.</p>
+</div>
+
+<!-- Dark Teal Large Progress Banner Card -->
+<div class="card-editorial dark-bg" style="margin-bottom: 2rem;">
+  <div class="card-title-editorial">
+    <span>PROGRES KESELURUHAN</span>
+    <span style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 900; color: var(--yellow); line-height: 1;">{{ completion_percentage }}%</span>
+  </div>
+
+  <div class="progress-bar-container" style="height: 22px; margin-top: 1rem; margin-bottom: 1.25rem;">
+    <div class="progress-bar-fill" style="width: {{ completion_percentage }}%;"></div>
+  </div>
+
+  <div style="font-size: 1.05rem; color: rgba(245, 241, 232, 0.9); font-weight: 600;">
+    {{ completed_tasks }} dari {{ total_tasks }} tugas telah berhasil kamu selesaikan!
+  </div>
+</div>
+
+<!-- Summary Metrics Grid -->
+<div class="metrics-varied-grid" style="margin-bottom: 2rem;">
+  <div class="metric-card-editorial cream-theme">
+    <div class="metric-card-label" style="color: var(--teal-dark);">Total Tugas</div>
+    <div class="metric-card-num" style="color: var(--teal-dark);">{{ total_tasks }}</div>
+  </div>
+
+  <div class="metric-card-editorial teal-theme">
+    <div class="metric-card-label" style="color: var(--yellow);">Tugas Selesai</div>
+    <div class="metric-card-num" style="color: var(--cream);">{{ completed_tasks }}</div>
+  </div>
+
+  <div class="metric-card-editorial coral-theme">
+    <div class="metric-card-label">Tugas Tersisa</div>
+    <div class="metric-card-num">{{ remaining_tasks }}</div>
+  </div>
+
+  <div class="metric-card-editorial yellow-theme">
+    <div class="metric-card-label">Persentase Selesai</div>
+    <div class="metric-card-num">{{ completion_percentage }}%</div>
+  </div>
+</div>
+
+<!-- Progress Breakdown per Subject -->
+<div class="card-editorial cream-bg">
+  <div class="card-title-editorial">
+    <span>Progres Per Mata Pelajaran</span>
+  </div>
+
+  {% if subject_data %}
+    <div style="display: flex; flex-direction: column; gap: 1.35rem;">
+      {% for sp in subject_data %}
+      <div style="background-color: var(--cream-card); border: 1px solid var(--border-editorial); border-radius: var(--radius-sm); padding: 1.25rem; box-shadow: var(--shadow-editorial);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="width: 14px; height: 14px; display: inline-block; background-color: {{ sp.color }}; border-radius: 4px;"></span>
+            <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--teal-dark);">{{ sp.name }}</span>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 0.875rem; font-weight: 700; color: var(--teal-dark);">
+            {{ sp.completed }} / {{ sp.total }} selesai ({{ sp.percentage }}%)
+          </span>
+        </div>
+
+        <div class="progress-bar-container" style="height: 14px;">
+          <div class="progress-bar-fill" style="width: {{ sp.percentage }}%; background: {{ sp.color }};"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-text">Belum ada data mata pelajaran</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Tambahkan mata pelajaran dan tugas untuk melihat grafik statistik progres kamu.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

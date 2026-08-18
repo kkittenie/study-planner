@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Mata Pelajaran | Study Planner{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="hero-editorial" style="padding: 2.25rem 2rem; margin-bottom: 1.75rem;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="hero-tag yellow">TOPIK STUDI</span>
+      <h1 class="heading-display" style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 0.5rem;">Mata pelajaran kamu.</h1>
+      <p class="heading-sub">Kelola kategori dan warna tag mata pelajaran untuk pengelompokan tugas.</p>
+    </div>
+    <button type="button" class="btn-editorial btn-editorial-coral" data-open-modal="#add-subject-modal">+ Tambah Mapel</button>
+  </div>
+</div>
+
+<!-- Subjects List -->
+<div class="card-editorial cream-bg">
+  <div class="card-title-editorial">
+    <span>Daftar Mata Pelajaran</span>
+    <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">Total: {{ subjects | length }}</span>
+  </div>
+
+  {% if subjects %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      {% for sub in subjects %}
+      <div style="border: 1px solid var(--border-editorial); border-radius: var(--radius-sm); padding: 1.15rem; background: var(--cream-card); border-left: 6px solid {{ sub.color }}; box-shadow: var(--shadow-editorial);">
+        
+        <form method="POST" action="{{ url_for('subject_edit', id=sub.id) }}" style="margin-bottom: 0.5rem;">
+          <div style="display: flex; gap: 0.6rem;">
+            <input type="text" name="name" class="form-control" value="{{ sub.name }}" required style="font-family: var(--font-display); font-weight: 800;">
+            <input type="color" name="color" value="{{ sub.color }}" style="width: 44px; height: 40px; padding: 2px; cursor: pointer; border: 1.5px solid var(--border-editorial); border-radius: var(--radius-sm); background: #ffffff;">
+            <button type="submit" class="btn-editorial btn-editorial-teal btn-editorial-sm">Simpan</button>
+          </div>
+        </form>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-editorial); padding-top: 0.65rem; margin-top: 0.65rem;">
+          <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+            📌 {{ sub.task_count }} Tugas Terhubung
+          </span>
+          <form method="POST" action="{{ url_for('subject_delete', id=sub.id) }}" onsubmit="return confirm('Hapus {{ sub.name }}? Tugas terhubung akan kehilangan label mapel.');">
+            <button type="submit" class="btn-editorial btn-editorial-coral btn-editorial-sm">Hapus</button>
+          </form>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-text">Belum ada mata pelajaran</div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Klik "+ Tambah Mapel" di atas untuk menambahkan mata pelajaran baru.</p>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Add Subject POP-UP MODAL -->
+<div class="modal-form-backdrop" id="add-subject-modal">
+  <div class="modal-form-card">
+    <div class="modal-form-header">
+      <h3 class="modal-form-title">Tambah Mata Pelajaran</h3>
+      <button type="button" class="modal-form-close" data-close-modal>&times;</button>
+    </div>
+
+    <form method="POST" action="{{ url_for('subjects') }}">
+      <div class="form-group">
+        <label class="form-label" for="name">Nama Mata Pelajaran *</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="contoh: Kimia Organik" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="color">Warna Tag Kategori</label>
+        <div style="display: flex; gap: 0.85rem; align-items: center;">
+          <input type="color" id="color" name="color" value="#347C7C" style="width: 48px; height: 42px; padding: 2px; cursor: pointer; border: 1.5px solid var(--border-editorial); border-radius: var(--radius-sm); background: #ffffff;">
+          <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Pilih warna penanda</span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn-editorial btn-editorial-coral" style="flex: 1; padding: 0.85rem;">+ Simpan Mata Pelajaran</button>
+        <button type="button" class="btn-editorial btn-editorial-teal" data-close-modal style="padding: 0.85rem;">Batal</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

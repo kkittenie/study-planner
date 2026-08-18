@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Masuk | Study Planner{% endblock %}
+
+{% block auth_content %}
+<div class="auth-split-wrapper">
+  <!-- Left Side: Editorial Branding & Highlights -->
+  <div class="auth-editorial-left">
+    <div>
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem;">
+        <span class="brand-badge">SP</span>
+        <span class="brand-title" style="font-size: 1.4rem;">Study Planner</span>
+      </div>
+
+      <span class="hero-tag coral" style="margin-bottom: 1.25rem; display: inline-block;">WORKSPACE BELAJAR</span>
+      <h1 class="heading-display" style="line-height: 0.95;">Siap<br>menyelesaikan<br>semua<br>tugasmu?</h1>
+      <p style="color: rgba(245, 241, 232, 0.85); font-size: 1rem; margin-top: 1.25rem; max-width: 380px; line-height: 1.5; font-weight: 500;">
+        Masuk ke akun kamu untuk mengelola jadwal, tugas, dan progres belajar mingguan secara efisien.
+      </p>
+
+      <!-- Feature Badges -->
+      <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; max-width: 380px;">
+        <div style="display: flex; align-items: center; gap: 0.65rem; background: rgba(255, 255, 255, 0.08); padding: 0.6rem 0.85rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);">
+          <span style="font-size: 1.1rem;">📅</span>
+          <span style="font-size: 0.85rem; font-family: var(--font-display); font-weight: 700; color: var(--cream);">Matriks Jadwal Mingguan Interaktif</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.65rem; background: rgba(255, 255, 255, 0.08); padding: 0.6rem 0.85rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);">
+          <span style="font-size: 1.1rem;">⚡</span>
+          <span style="font-size: 0.85rem; font-family: var(--font-display); font-weight: 700; color: var(--cream);">Filter Auto-Load & Manajemen Tugas</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.65rem; background: rgba(255, 255, 255, 0.08); padding: 0.6rem 0.85rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);">
+          <span style="font-size: 1.1rem;">📊</span>
+          <span style="font-size: 0.85rem; font-family: var(--font-display); font-weight: 700; color: var(--cream);">Statistik & Tracking Progres Real-Time</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size: 0.8125rem; color: rgba(245, 241, 232, 0.5); font-family: var(--font-mono); margin-top: 2rem;">
+      © Study Planner — Workspace Produktivitas Siswa
+    </div>
+
+    <!-- Decorative background elements -->
+    <div class="hero-circle-accent" style="opacity: 0.12; width: 320px; height: 320px;"></div>
+  </div>
+
+  <!-- Right Side: Form Card -->
+  <div class="auth-editorial-right">
+    <div style="width: 100%; max-width: 440px;">
+      <div class="auth-form-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+          <div>
+            <h2 style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 900; color: var(--teal-dark); letter-spacing: -0.03em;">Masuk Akun</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
+              Masukkan email atau username kamu.
+            </p>
+          </div>
+          <span style="font-size: 2.2rem; line-height: 1;">🔑</span>
+        </div>
+
+        <form method="POST" action="{{ url_for('login') }}">
+          <div class="form-group">
+            <label class="form-label" for="login_input">Email atau Nama Pengguna</label>
+            <input type="text" id="login_input" name="login_input" class="form-control" required placeholder="nama@contoh.com atau username" autofocus>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Kata Sandi</label>
+            <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
+          </div>
+
+          <button type="submit" class="btn-editorial btn-editorial-coral" style="width: 100%; padding: 0.85rem; font-size: 0.95rem; margin-top: 0.75rem;">
+            Masuk ke Beranda →
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 1.75rem; border-top: 1px solid var(--border-editorial); padding-top: 1.25rem;">
+          <span style="font-size: 0.875rem; color: var(--text-muted);">Belum punya akun?</span>
+          <a href="{{ url_for('register') }}" style="color: var(--coral); font-family: var(--font-display); font-weight: 800; text-decoration: none; margin-left: 0.35rem; font-size: 0.875rem;">
+            Daftar Sekarang
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
