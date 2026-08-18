@@ -122,14 +122,18 @@ body {
   justify-content: center;
   width: 38px;
   height: 38px;
-  background-color: var(--coral);
-  color: var(--cream);
   border-radius: 12px;
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 0.95rem;
+  overflow: hidden;
+  flex-shrink: 0;
   transform: rotate(-3deg);
   box-shadow: 0 4px 12px rgba(242, 101, 74, 0.4);
+}
+
+.brand-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .nav-menu {
@@ -1944,7 +1948,3 @@ select.form-control option {
 .brutal-table tbody tr:hover td {
   background-color: #FFFFFF;
 }
-
-
-
-

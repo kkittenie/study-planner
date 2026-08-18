@@ -1,0 +1,46 @@
+<svg width="900" height="240" viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5714F"/>
+      <stop offset="100%" stop-color="#EA5A3D"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon badge -->
+  <g transform="translate(20,20)">
+    <rect x="0" y="0" width="200" height="200" rx="48" fill="url(#bgGrad2)"/>
+    <circle cx="160" cy="46" r="28" fill="#FFFFFF" opacity="0.08"/>
+    <circle cx="46" cy="164" r="36" fill="#163C39" opacity="0.06"/>
+
+    <g transform="translate(0,0)">
+      <path d="M100,82
+               C 82,66 52,60 30,64
+               L 30,132
+               C 52,128 82,134 100,150
+               Z"
+            fill="#FCF6EA" stroke="#163C39" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M100,82
+               C 118,66 148,60 170,64
+               L 170,132
+               C 148,128 118,134 100,150
+               Z"
+            fill="#FCF6EA" stroke="#163C39" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M100,82 L100,150" stroke="#163C39" stroke-width="5" stroke-linecap="round"/>
+
+      <line x1="42" y1="84" x2="86" y2="93" stroke="#163C39" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+      <line x1="42" y1="100" x2="86" y2="108" stroke="#163C39" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+      <line x1="42" y1="116" x2="86" y2="122" stroke="#163C39" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
+
+      <line x1="114" y1="93" x2="158" y2="84" stroke="#163C39" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+      <line x1="114" y1="108" x2="158" y2="100" stroke="#163C39" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+      <line x1="114" y1="122" x2="158" y2="116" stroke="#163C39" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
+    </g>
+
+    <circle cx="156" cy="148" r="26" fill="#F0C33E" stroke="#F5714F" stroke-width="4"/>
+    <path d="M145,148 L154,157 L170,138" fill="none" stroke="#163C39" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="250" y="112" font-family="Verdana, Arial, sans-serif" font-size="60" font-weight="700" fill="#163C39">Study</text>
+  <text x="250" y="172" font-family="Verdana, Arial, sans-serif" font-size="60" font-weight="700" fill="#EA5A3D">Planner</text>
+</svg>
